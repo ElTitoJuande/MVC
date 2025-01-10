@@ -1,20 +1,24 @@
 <?php
-session_start();
-
-require_once('modelo.php');
 
 function inicio(){
     if(isset($_POST["fIni"])){
-        $db=new db();
+        
+        require_once('class.db.php');
+        require_once('modelo.php');
 
-    if(!isset($_POST["rec"]) && isset($_COOKIE["usuario"]))
-    setcookie("usuario", "", time() - 30);
+        $db = new db();
+
+    if(!isset($_POST["rec"]))
+        unset_cookie("usuario");
+
+        setcookie("usuario", "", time() - 30);
 
         if($db->compCrede($_POST["nom"], $_POST["psw"])){
             if(isset($_POST["rec"]))
-            setcookie("usuario",$_POST["nom"], time() + (86400*30));
-            
-            $_SESSION["usu"]=$_POST["nom"];
+    
+            set_cookie("usuario", $_POST["nom"]);
+
+            set_session("usu", $_POST["nom"]);
             $nUsu = $_POST["nom"];
             require_once('bienvenida.php');
         }else{
@@ -23,8 +27,8 @@ function inicio(){
     }
 }
 function cerrarSesion(){
-    session_unset();
-    session_destroy();
+    require_once('modelo.php');
+    unset_session();
 
     header("Location: index.php");
 }
@@ -33,8 +37,10 @@ if(isset($_REQUEST["action"])){
     $action = $_REQUEST["action"];
     $action();
 }else{
-    if(isset($_SESSION['usu'])){
-        $nUsu =$_COOKIE['usu'];
+    require_once('modelo.php');
+
+    if(is_session("usu")){
+        $nUsu = get_session("usu");
         require_once('bienvenida.php');
     }else{
         header("Location: login.php");
