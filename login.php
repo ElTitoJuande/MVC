@@ -20,5 +20,6 @@
         <br>
         <input type="submit" value="Enviar" name="fIni">
     </form>
+    <p>¿No tienes cuenta? <a href="index.php?action=registro">Registrate</a></p>
 </body>
 </html>
