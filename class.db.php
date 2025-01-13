@@ -3,7 +3,8 @@ class db{
     private $conn;
 
     public function __construct(){
-        $this->conn = new mysqli("localhost", "root", "", "usuarios");
+        require_once('../../../cred.php');
+        $this->conn = new mysqli("localhost", USU_CONN, PSW_CONN, "usuarios");
     }
     
     public function compCrede(String $nom, String $psw){
